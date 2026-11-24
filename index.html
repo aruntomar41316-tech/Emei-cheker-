@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#071426">
+<title>IMEI CHECKER | Arun Tomar</title>
+<style>
+:root{--bg:#071426;--panel:#10233d;--line:#25415f;--text:#f4f8ff;--muted:#a9bad0;--blue:#55a7ff;--cyan:#62e0e8}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#15365a 0,#071426 55%);color:var(--text);font-family:Arial,Helvetica,sans-serif;min-height:100vh;display:flex;flex-direction:column}
+header{padding:22px 18px;text-align:center;border-bottom:1px solid #ffffff18}
+.brand{font-size:13px;letter-spacing:4px;color:var(--cyan);font-weight:700}.owner{font-size:12px;color:var(--muted);margin-top:8px;letter-spacing:2px}
+main{width:min(92%,620px);margin:42px auto;flex:1}
+h1{text-align:center;font-size:clamp(30px,7vw,44px);margin:0 0 10px;letter-spacing:1px}
+.sub{text-align:center;color:var(--muted);line-height:1.55;margin:0 auto 28px;max-width:460px}
+.card{background:linear-gradient(150deg,#122a48,#0c1c32);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:0 18px 50px #0005}
+label{display:block;font-weight:700;margin-bottom:10px}
+input{width:100%;padding:16px;border-radius:12px;border:1px solid #355577;background:#071426;color:white;font-size:18px;letter-spacing:2px;outline:none}
+input:focus{border-color:var(--blue);box-shadow:0 0 0 3px #55a7ff22}
+button{width:100%;margin-top:14px;padding:15px;border:0;border-radius:12px;background:linear-gradient(90deg,#2586ef,#35c6d6);color:#041426;font-size:16px;font-weight:800;cursor:pointer}
+#result{display:none;margin-top:18px;padding:15px;border-radius:12px;background:#071426;border:1px solid var(--line);line-height:1.55}
+.note{font-size:12px;color:var(--muted);line-height:1.6;margin:18px 2px 0}
+footer{margin-top:auto;text-align:center;padding:25px 15px 30px;background:#050e1b;border-top:1px solid #ffffff18}
+.footer-title{font-size:12px;letter-spacing:2px;color:var(--muted);font-weight:700}
+.phone{display:inline-block;color:var(--cyan);font-size:22px;font-weight:800;text-decoration:none;margin-top:9px}
+.copyright{font-size:11px;color:#71849c;margin-top:12px}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">IMEI CHECKER</div>
+  <div class="owner">BY ARUN TOMAR</div>
+</header>
+<main>
+  <h1>IMEI CHECKER</h1>
+  <p class="sub">Check whether an IMEI number has a valid 15-digit format and checksum.</p>
+  <section class="card">
+    <label for="imei">Enter 15-digit IMEI number</label>
+    <input id="imei" inputmode="numeric" autocomplete="off" maxlength="15" placeholder="Enter IMEI number">
+    <button onclick="checkImei()">CHECK IMEI</button>
+    <div id="result" role="status" aria-live="polite"></div>
+    <p class="note"><strong>Privacy & accuracy:</strong> This page only checks the number's format and checksum. It does not identify the phone owner, reveal private information or confirm theft/blacklist status. A valid checksum does not prove that a device is genuine or unblocked. Do not enter or share someone else's IMEI without permission.</p>
+  </section>
+</main>
+<footer>
+  <div class="footer-title">CUSTOMER SUPPORT</div>
+  <a class="phone" href="tel:7067578880">7067578880</a>
+  <div class="copyright">© <span id="year"></span> ARUN TOMAR · IMEI CHECKER</div>
+</footer>
+<script>
+function checkImei(){
+  const raw=document.getElementById('imei').value.trim();
+  const box=document.getElementById('result');
+  box.style.display='block';
+  if(!/^\d{15}$/.test(raw)){box.textContent='Please enter exactly 15 digits.';return;}
+  let sum=0;
+  for(let i=0;i<15;i++){
+    let n=Number(raw[i]);
+    if(i%2===1){n*=2;if(n>9)n-=9;}
+    sum+=n;
+  }
+  const valid=sum%10===0;
+  box.textContent=valid
+    ? 'Format and checksum: valid. This does not confirm device model, ownership, authenticity or blacklist status.'
+    : 'The IMEI checksum is not valid. Please check the digits and try again.';
+}
+document.getElementById('year').textContent=new Date().getFullYear();
+document.getElementById('imei').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,15)});
+</script>
+</body>
+</html>
